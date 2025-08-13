@@ -7,7 +7,7 @@ import shap
 from scipy.stats import ttest_ind, chi2_contingency
 
 # Load your dataset
-df_raw = pd.read_csv("your_dataset.csv")
+df_raw = pd.read_csv("recruitment_data.csv")
 df_copy = df_raw.copy()
 
 # ===== QUESTION FUNCTIONS =====
@@ -84,3 +84,4 @@ question_map = {
 
 selected_question = st.selectbox("Select an EDA question", list(question_map.keys()))
 question_map[selected_question]()  # Run the selected question's function
+
