@@ -59,7 +59,7 @@ def plot_candidate(stats):
     stats_norm = [s / m * 100 for s, m in zip(stats, max_values)]
     stats_norm += stats_norm[:1]
 
-    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
     ax.plot(angles, stats_norm, color="blue", linewidth=2)
     ax.fill(angles, stats_norm, color="skyblue", alpha=0.4)
 
