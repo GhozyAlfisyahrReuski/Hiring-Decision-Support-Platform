@@ -23,7 +23,7 @@ with st.sidebar:
 
 # bagian luar sidebar
 if page == 'Home':
-    eda.run()
+    home.run()
 elif page == 'EDA':
     eda.run()
 else:
