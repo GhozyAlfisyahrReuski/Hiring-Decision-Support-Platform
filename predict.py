@@ -1,4 +1,3 @@
-# predict.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -55,9 +54,12 @@ num_vars = len(labels)
 angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
 angles += angles[:1]
 
-def plot_candidate(stats, candidate_score_val):
-    stats_norm = [s / m * 100 for s, m in zip(stats[:-1], max_values)]
-    stats_norm += stats_norm[:1]
+def plot_candidate(stats):
+    # Normalize scores
+    stats_norm = [s / m * 100 for s, m in zip(stats, max_values)]
+    stats_norm += stats_norm[:1]  # close the loop
+
+    # Radar chart
     fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
     ax.plot(angles, stats_norm, color="blue", linewidth=2)
     ax.fill(angles, stats_norm, color="skyblue", alpha=0.4)
@@ -65,7 +67,7 @@ def plot_candidate(stats, candidate_score_val):
     ax.set_xticklabels(labels)
     ax.set_yticks([20, 40, 60, 80, 100])
     ax.set_yticklabels(["20", "40", "60", "80", "100"])
-    ax.set_title(f"Candidate Score: {candidate_score_val:.2f}", size=14, y=1.1)
+    ax.set_title("Candidate Feature Profile", size=14, y=1.1)
     return fig
 
 def run():
@@ -125,7 +127,7 @@ def run():
         heuristic_score = sum(inf_scaled[f] * w for f, w in feature_weights.items())
         model_score = loaded_model.predict_proba(inf_data)[:, 1]
         candidate_score = (0.5 * model_score + 0.5 * heuristic_score) * 100
-           # Predict
+                # Predict
         y_pred_loaded = loaded_model.predict(inf_data)
         prediction_label = "Passed" if y_pred_loaded[0] == 1 else "Not Passed"
 
@@ -137,20 +139,20 @@ def run():
             f"""
             <div style="background-color:{bg_color}; padding:10px; border-radius:10px; text-align:center;">
                 <h2 style="color:black;">Prediction: {prediction_label}</h2>
-                <p style="font-size:30px; font-weight:bold;">Candidate Score: {candidate_score[0]:.2f}</p>
+                <p style="font-size:20px; font-weight:bold;">Candidate Score: {candidate_score[0]:.2f}</p>
             </div>
             """,
             unsafe_allow_html=True
         )
 
 
-        # Radar chart
+        # Radar chart 
         stats = [
             portfolio_score[0],
             technical_score[0],
             recruitment_strategy,
             experience_years,
-            education_level,
+            education_level
         ]
         fig = plot_candidate(stats)
         st.pyplot(fig)
