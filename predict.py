@@ -55,36 +55,62 @@ angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
 angles += angles[:1]
 
 def plot_candidate(stats):
-    # Normalize scores
+    # Normalize scores for consistent plotting (0–100 scale)
     stats_norm = [s / m * 100 for s, m in zip(stats, max_values)]
     stats_norm += stats_norm[:1]  # close the loop
 
-    # Radar chart
     fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
     ax.plot(angles, stats_norm, color="blue", linewidth=2)
     ax.fill(angles, stats_norm, color="skyblue", alpha=0.4)
+
+    # Set axis labels
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(labels)
+
+    # Standard percentage ticks for numeric axes
     ax.set_yticks([20, 40, 60, 80, 100])
     ax.set_yticklabels(["20", "40", "60", "80", "100"])
+
+    # Add custom category labels for specific axes
+    category_labels = {
+        "EducationLevel": ["Bachelor T1", "Bachelor T2", "Master's", "PhD"],
+        "ExperienceYears": ["5 yrs", "10 yrs", "15 yrs"],
+        "RecruitmentStrategy": ["Aggressive", "Moderate", "Conservative"]
+    }
+
+    for i, label in enumerate(labels):
+        if label in category_labels:
+            vals = category_labels[label]
+            max_val = max_values[i]
+            step = max_val / len(vals)
+            angle = angles[i]
+            for j, txt in enumerate(vals, start=1):
+                r = (j * step) / max_val * 100  # convert to percentage scale
+                ax.text(angle, r, txt, ha='center', va='center', fontsize=8,
+                        rotation=angle * 180 / np.pi)
+
     return fig
 
 def run():
     st.title("Candidate Score Prediction")
 
     with st.form("candidate_form"):
-        recruitment_strategy = st.selectbox("Recruitment Strategy", [1, 2, 3], format_func=lambda x: {1: "Aggresive", 2: "Moderate", 3: "Conservative"}[x])
+        recruitment_strategy = st.selectbox(
+            "Recruitment Strategy",
+            [1, 2, 3],
+            format_func=lambda x: {1: "Aggressive", 2: "Moderate", 3: "Conservative"}[x]
+        )
         education_level = st.selectbox(
-    "Education Level",
-    options=[1, 2, 3, 4],
-    format_func=lambda x: {
-        1: "Bachelor’s (Type 1)",
-        2: "Bachelor’s (Type 2)",
-        3: "Master’s",
-        4: "PhD"
-    }[x],
-    index=1  # Default to option 2
-)
+            "Education Level",
+            options=[1, 2, 3, 4],
+            format_func=lambda x: {
+                1: "Bachelor’s (Type 1)",
+                2: "Bachelor’s (Type 2)",
+                3: "Master’s",
+                4: "PhD"
+            }[x],
+            index=1
+        )
         skill_score = st.slider("Skill Score", 0, 100, 50)
         personality_score = st.slider("Personality Score", 0, 100, 50)
         interview_score = st.slider("Interview Score", 0, 100, 50)
@@ -126,14 +152,15 @@ def run():
         heuristic_score = sum(inf_scaled[f] * w for f, w in feature_weights.items())
         model_score = loaded_model.predict_proba(inf_data)[:, 1]
         candidate_score = (0.5 * model_score + 0.5 * heuristic_score) * 100
-                # Predict
+
+        # Predict
         y_pred_loaded = loaded_model.predict(inf_data)
         prediction_label = "Passed" if y_pred_loaded[0] == 1 else "Not Passed"
 
         # Background highlight colors
-        bg_color = "lightgreen" if prediction_label == "Passed" else "#ff9999"  # light red
+        bg_color = "lightgreen" if prediction_label == "Passed" else "#ff9999"
 
-        # Display results with background highlight
+        # Display results
         st.markdown(
             f"""
             <div style="background-color:{bg_color}; padding:10px; border-radius:10px; text-align:center;">
@@ -143,7 +170,6 @@ def run():
             """,
             unsafe_allow_html=True
         )
-
 
         # Radar chart 
         stats = [
@@ -155,3 +181,7 @@ def run():
         ]
         fig = plot_candidate(stats)
         st.pyplot(fig)
+
+if __name__ == "__main__":
+    run()
+
