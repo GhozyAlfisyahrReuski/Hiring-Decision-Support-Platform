@@ -6,3 +6,8 @@ pillow
 numpy==1.26.4
 scikit-learn==1.6.1
 feature-engine==1.8.3
+shap
+scipy
+joblib
+xgboost
+plotly
