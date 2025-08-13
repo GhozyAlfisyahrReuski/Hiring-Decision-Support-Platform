@@ -1,21 +1,25 @@
-# import libraries
+# === Import libraries ===
 import streamlit as st
 import home
-import eda 
+import eda
 import predict as predict
 
-# bagian dalam sidebar
+# === Page configuration ===
+st.set_page_config(
+    page_title="CitoConnect Hiring Decision Support Platform",
+    page_icon=":briefcase:"
+)
+
+# === Sidebar ===
 with st.sidebar:
     st.write("# Page Navigation")
 
-    # toggle pilih halaman
+    # Page selection
     page = st.selectbox("Select Page", ("Home", "EDA", 'Predict Hiring and Rating'))
 
-    # test
     st.write(f'You are in: {page} page')
 
     st.write('## About')
-    # magic
     '''
     The **CitoConnect Hiring Decision Support Platform** helps companies make **data-driven hiring decisions**.  
     It predicts a candidate’s hiring outcome, calculates an overall score, and highlights the most important factors.  
@@ -24,12 +28,16 @@ with st.sidebar:
     CitoConnect empowers HR teams to hire **smarter and faster**.
     '''
 
-
-
-# bagian luar sidebar
+# === Main content based on selection ===
 if page == 'Home':
     home.run()
 elif page == 'EDA':
     eda.run()
 else:
     predict.run()
+
+# === Home page title (default view) ===
+if page == 'Home':
+    st.title("Welcome to CitoConnect Hiring Decision Support Platform")
+    st.write("Empowering your hiring process with data-driven insights.")
+
