@@ -1,16 +1,17 @@
 # import libraries
 import streamlit as st
-import eda, predict as predict
+import eda 
+import predict as predict
 
 # bagian dalam sidebar
 with st.sidebar:
     st.write("# Page Navigation")
 
     # toggle pilih halaman
-    page = st.selectbox("Pilih Halaman", ("EDA", 'Predict Rating'))
+    page = st.selectbox("Select Page", ("EDA", 'Predict Hiring and Rating'))
 
     # test
-    st.write(f'Halaman yang dituju {page}')
+    st.write(f'You are in: {page} page')
 
     st.write('## About')
     # magic
