@@ -4,7 +4,7 @@ def run():
     st.markdown("#  CitoConnect Hiring Decision Support Platform")
     
     # Image below the title
-    st.image("Training-the-HR-Team-1.20.20.jpg", use_column_width=True)
+    st.image("Training-the-HR-Team-1.20.20.jpg",  use_container_width=True)
     
     st.markdown("""
 
@@ -85,6 +85,7 @@ def run():
 
 if __name__ == "__main__":
     run()
+
 
 
 
