@@ -1,3 +1,4 @@
+# predict.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -9,6 +10,13 @@ import matplotlib.pyplot as plt
 loaded_model = joblib.load("best_xgb_model.pkl")
 with open("best_xgb_params.json", "r") as f:
     best_params = json.load(f)
+
+# === Expected Feature Order from Training ===
+EXPECTED_FEATURE_ORDER = [
+    'Age', 'Gender', 'EducationLevel', 'ExperienceYears',
+    'PreviousCompanies', 'DistanceFromCompany', 'InterviewScore',
+    'SkillScore', 'PersonalityScore', 'RecruitmentStrategy'
+]
 
 # === Feature Importance ===
 feature_importance = {
@@ -29,9 +37,9 @@ feature_weights = {f: imp / total_importance for f, imp in feature_importance.it
 # === Min/Max Values ===
 feature_minmax = {
     'EducationLevel': (1.0, 4.0),
-    'ExperienceYears': (0.0, 15.0),
-    'PreviousCompanies': (1.0, 5.0),
-    'DistanceFromCompany': (1.031376, 50.992462),
+    'ExperienceYears': (0.0, 40.0),
+    'PreviousCompanies': (0.0, 5.0),
+    'DistanceFromCompany': (1.0 , 100.0),
     'InterviewScore': (0.0, 100.0),
     'SkillScore': (0.0, 100.0),
     'PersonalityScore': (0.0, 100.0),
@@ -60,62 +68,78 @@ def plot_candidate(stats, candidate_score_val):
     ax.set_title(f"Candidate Score: {candidate_score_val:.2f}", size=14, y=1.1)
     return fig
 
-# === Streamlit UI ===
-st.title("Candidate Score Prediction")
+def run():
+    st.title("Candidate Score Prediction")
 
-with st.form("candidate_form"):
-    recruitment_strategy = st.selectbox("Recruitment Strategy", [1, 2, 3])
-    education_level = st.slider("Education Level", 1, 4, 2)
-    skill_score = st.slider("Skill Score", 0, 100, 50)
-    personality_score = st.slider("Personality Score", 0, 100, 50)
-    interview_score = st.slider("Interview Score", 0, 100, 50)
-    experience_years = st.slider("Experience Years", 0, 15, 5)
-    gender = st.selectbox("Gender", [0, 1])
-    age = st.slider("Age", 18, 65, 30)
-    distance = st.number_input("Distance from Company (km)", min_value=1.0, max_value=60.0, value=10.0)
-    previous_companies = st.slider("Previous Companies", 1, 5, 2)
-    submit = st.form_submit_button("Predict Score")
+    with st.form("candidate_form"):
+        recruitment_strategy = st.selectbox("Recruitment Strategy", [1, 2, 3], format_func=lambda x: {1: "Aggresive", 2: "Moderate", 3: "Conservative"}[x])
+        education_level = st.selectbox(
+    "Education Level",
+    options=[1, 2, 3, 4],
+    format_func=lambda x: {
+        1: "Bachelor’s (Type 1)",
+        2: "Bachelor’s (Type 2)",
+        3: "Master’s",
+        4: "PhD"
+    }[x],
+    index=1  # Default to option 2
+)
+        skill_score = st.slider("Skill Score", 0, 100, 50)
+        personality_score = st.slider("Personality Score", 0, 100, 50)
+        interview_score = st.slider("Interview Score", 0, 100, 50)
+        experience_years = st.slider("Experience Years", 0, 15, 5)
+        gender = st.selectbox("Gender", [0, 1], format_func=lambda x: "Male" if x == 0 else "Female")
+        age = st.slider("Age", 18, 65, 30)
+        distance = st.number_input("Distance from Company (km)", min_value=1.0, max_value=60.0, value=10.0)
+        previous_companies = st.slider("Previous Companies", 1, 5, 2)
+        submit = st.form_submit_button("Predict Score")
 
-if submit:
-    inf_data = pd.DataFrame([{
-        'RecruitmentStrategy': recruitment_strategy,
-        'EducationLevel': education_level,
-        'SkillScore': skill_score,
-        'PersonalityScore': personality_score,
-        'InterviewScore': interview_score,
-        'ExperienceYears': experience_years,
-        'Gender': gender,
-        'Age': age,
-        'DistanceFromCompany': distance,
-        'PreviousCompanies': previous_companies
-    }])
+    if submit:
+        # Create input dataframe
+        inf_data = pd.DataFrame([{
+            'RecruitmentStrategy': recruitment_strategy,
+            'EducationLevel': education_level,
+            'SkillScore': skill_score,
+            'PersonalityScore': personality_score,
+            'InterviewScore': interview_score,
+            'ExperienceYears': experience_years,
+            'Gender': gender,
+            'Age': age,
+            'DistanceFromCompany': distance,
+            'PreviousCompanies': previous_companies
+        }])
 
-    # Scale features
-    inf_scaled = pd.DataFrame()
-    for feature in feature_importance.keys():
-        min_val, max_val = feature_minmax[feature]
-        inf_scaled[feature] = (inf_data[feature] - min_val) / (max_val - min_val)
-        inf_scaled[feature] = inf_scaled[feature].clip(0, 1)
+        # Ensure the column order matches training
+        inf_data = inf_data[EXPECTED_FEATURE_ORDER]
 
-    portfolio_score = inf_scaled[['EducationLevel', 'ExperienceYears', 'PreviousCompanies']].mean(axis=1) * 100
-    technical_score = inf_scaled[['InterviewScore', 'SkillScore', 'PersonalityScore']].mean(axis=1) * 100
-    heuristic_score = sum(inf_scaled[f] * w for f, w in feature_weights.items())
-    model_score = loaded_model.predict_proba(inf_data)[:, 1]
-    candidate_score = (0.5 * model_score + 0.5 * heuristic_score) * 100
-    y_pred_loaded = loaded_model.predict(inf_data)
-    prediction_label = "Passed" if y_pred_loaded[0] == 1 else "Not Passed"
+        # Scale features for heuristic scoring
+        inf_scaled = pd.DataFrame()
+        for feature in feature_importance.keys():
+            min_val, max_val = feature_minmax[feature]
+            inf_scaled[feature] = (inf_data[feature] - min_val) / (max_val - min_val)
+            inf_scaled[feature] = inf_scaled[feature].clip(0, 1)
 
-    st.subheader(f"Prediction: {prediction_label}")
-    st.metric("Candidate Score", f"{candidate_score[0]:.2f}")
+        # Calculate scores
+        portfolio_score = inf_scaled[['EducationLevel', 'ExperienceYears', 'PreviousCompanies']].mean(axis=1) * 100
+        technical_score = inf_scaled[['InterviewScore', 'SkillScore', 'PersonalityScore']].mean(axis=1) * 100
+        heuristic_score = sum(inf_scaled[f] * w for f, w in feature_weights.items())
+        model_score = loaded_model.predict_proba(inf_data)[:, 1]
+        candidate_score = (0.5 * model_score + 0.5 * heuristic_score) * 100
+        y_pred_loaded = loaded_model.predict(inf_data)
+        prediction_label = "Passed" if y_pred_loaded[0] == 1 else "Not Passed"
 
-    # Radar chart for this candidate
-    stats = [
-        portfolio_score[0],
-        technical_score[0],
-        recruitment_strategy,
-        experience_years,
-        education_level,
-        candidate_score[0]
-    ]
-    fig = plot_candidate(stats, candidate_score[0])
-    st.pyplot(fig)
+        # Display results
+        st.subheader(f"Prediction: {prediction_label}")
+        st.metric("Candidate Score", f"{candidate_score[0]:.2f}")
+
+        # Radar chart
+        stats = [
+            portfolio_score[0],
+            technical_score[0],
+            recruitment_strategy,
+            experience_years,
+            education_level,
+            candidate_score[0]
+        ]
+        fig = plot_candidate(stats, candidate_score[0])
+        st.pyplot(fig)
