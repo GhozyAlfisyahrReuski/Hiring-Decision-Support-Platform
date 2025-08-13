@@ -90,7 +90,7 @@ def plot_candidate(stats):
                 ax.text(
                     angle, r + 5, txt,  # +5 offset for clarity
                     ha='center', va='center',
-                    fontsize=8,
+                    fontsize=5,
                     rotation=0,  # keep horizontal
                     rotation_mode='anchor'
                 )
