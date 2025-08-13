@@ -15,11 +15,15 @@ with st.sidebar:
     st.write(f'You are in: {page} page')
 
     st.write('## About')
-    # magic
-    '''
-    Page ini berisikan hasil analisis data terhadap pemain di FIFA 2024
-    dan juga prediksi rating pemain berdasarkan atribut yang dimiliki
-    '''
+# magic
+'''
+The **CitoConnect Hiring Decision Support Platform** helps companies make **data-driven hiring decisions**.  
+It predicts a candidate’s hiring outcome, calculates an overall score, and highlights the most important factors.  
+
+Designed to improve efficiency, reduce bias, and provide fair, explainable results,  
+CitoConnect empowers HR teams to hire **smarter and faster**.
+'''
+
 
 # bagian luar sidebar
 if page == 'Home':
