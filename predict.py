@@ -137,8 +137,8 @@ def run():
         st.markdown(
             f"""
             <div style="background-color:{bg_color}; padding:10px; border-radius:10px; text-align:center;">
-                <h2 style="color:black;">Prediction: {prediction_label}</h2>
-                <p style="font-size:20px; font-weight:bold;">Candidate Score: {candidate_score[0]:.2f}</p>
+                <h2 style="color:black;">{prediction_label}</h2>
+                <p style="font-size:45px; font-weight:bold;">Candidate Score: {candidate_score[0]:.2f}</p>
             </div>
             """,
             unsafe_allow_html=True
