@@ -67,7 +67,6 @@ def plot_candidate(stats):
     ax.set_xticklabels(labels)
     ax.set_yticks([20, 40, 60, 80, 100])
     ax.set_yticklabels(["20", "40", "60", "80", "100"])
-    ax.set_title("Candidate Feature Profile", size=14, y=1.1)
     return fig
 
 def run():
