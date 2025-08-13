@@ -143,3 +143,18 @@ def run():
         ]
         fig = plot_candidate(stats, candidate_score[0])
         st.pyplot(fig)
+
+# Display results with color highlight
+        if y_pred_loaded[0] == 1:
+            st.markdown(
+                f"<h2 style='color:green;'>Prediction: Passed ✅</h2>",
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                f"<h2 style='color:red;'>Prediction: Not Passed ❌</h2>",
+                unsafe_allow_html=True
+            )
+
+        # Candidate score
+        st.metric("Candidate Score", f"{candidate_score[0]:.2f}")
