@@ -54,6 +54,7 @@ num_vars = len(labels)
 angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
 angles += angles[:1]
 
+
 def plot_candidate(stats):
     # Normalize scores for consistent plotting (0–100 scale)
     stats_norm = [s / m * 100 for s, m in zip(stats, max_values)]
@@ -65,7 +66,7 @@ def plot_candidate(stats):
 
     # Set axis labels
     ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(labels)
+    ax.set_xticklabels(labels,fontsize=9)
 
     # Standard percentage ticks for numeric axes
     ax.set_yticks([20, 40, 60, 80, 100])
