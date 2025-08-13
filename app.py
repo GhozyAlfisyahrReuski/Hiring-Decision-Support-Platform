@@ -9,7 +9,7 @@ with st.sidebar:
     st.write("# Page Navigation")
 
     # toggle pilih halaman
-    page = st.selectbox("Select Page", ("Home" "EDA", 'Predict Hiring and Rating'))
+    page = st.selectbox("Select Page", ("Home", "EDA", 'Predict Hiring and Rating'))
 
     # test
     st.write(f'You are in: {page} page')
