@@ -59,8 +59,8 @@ def plot_candidate(stats):
     stats_norm = [s / m * 100 for s, m in zip(stats, max_values)]
     stats_norm += stats_norm[:1]
 
-    fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(polar=True))
-    ax.plot(angles, stats_norm, color="blue", linewidth=2)
+    fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(polar=True))
+    ax.plot(angles, stats_norm, color="blue", linewidth=1)
     ax.fill(angles, stats_norm, color="skyblue", alpha=0.4)
 
     # Set axis labels
