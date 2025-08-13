@@ -66,7 +66,7 @@ def plot_candidate(stats):
 
     # Set axis labels
     ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(labels,fontsize=9)
+    ax.set_xticklabels(labels,fontsize=7)
 
     # Standard percentage ticks for numeric axes
     ax.set_yticks([20, 40, 60, 80, 100])
