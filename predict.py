@@ -125,12 +125,24 @@ def run():
         heuristic_score = sum(inf_scaled[f] * w for f, w in feature_weights.items())
         model_score = loaded_model.predict_proba(inf_data)[:, 1]
         candidate_score = (0.5 * model_score + 0.5 * heuristic_score) * 100
+           # Predict
         y_pred_loaded = loaded_model.predict(inf_data)
         prediction_label = "Passed" if y_pred_loaded[0] == 1 else "Not Passed"
 
-        # Display results
-        st.subheader(f"Prediction: {prediction_label}")
-        st.metric("Candidate Score", f"{candidate_score[0]:.2f}")
+        # Background highlight colors
+        bg_color = "lightgreen" if prediction_label == "Passed" else "#ff9999"  # light red
+
+        # Display results with background highlight
+        st.markdown(
+            f"""
+            <div style="background-color:{bg_color}; padding:10px; border-radius:10px; text-align:center;">
+                <h2 style="color:black;">Prediction: {prediction_label}</h2>
+                <p style="font-size:20px; font-weight:bold;">Candidate Score: {candidate_score[0]:.2f}</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
 
         # Radar chart
         stats = [
@@ -143,18 +155,3 @@ def run():
         ]
         fig = plot_candidate(stats, candidate_score[0])
         st.pyplot(fig)
-
-# Display results with color highlight
-        if y_pred_loaded[0] == 1:
-            st.markdown(
-                f"<h2 style='color:green;'>Prediction: Passed ✅</h2>",
-                unsafe_allow_html=True
-            )
-        else:
-            st.markdown(
-                f"<h2 style='color:red;'>Prediction: Not Passed ❌</h2>",
-                unsafe_allow_html=True
-            )
-
-        # Candidate score
-        st.metric("Candidate Score", f"{candidate_score[0]:.2f}")
