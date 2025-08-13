@@ -4,6 +4,7 @@ def run():
     st.markdown("""
     #  CitoConnect Hiring Decision Support Platform
 
+
     This platform is designed for companies to **input candidate data** and receive:
     - **Predicted hiring decision** (Hire / No Hire)
     - **Candidate score** (overall ranking metric)
@@ -81,6 +82,7 @@ def run():
 
 if __name__ == "__main__":
     run()
+
 
 
 
