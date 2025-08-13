@@ -60,7 +60,7 @@ def plot_candidate(stats):
     stats_norm += stats_norm[:1]
 
     fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(polar=True))
-    ax.plot(angles, stats_norm, color="blue", linewidth=1)
+    ax.plot(angles, stats_norm, color="blue", linewidth=0.5)
     ax.fill(angles, stats_norm, color="skyblue", alpha=0.4)
 
     # Set axis labels
