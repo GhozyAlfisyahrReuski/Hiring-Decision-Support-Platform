@@ -137,7 +137,7 @@ def run():
             f"""
             <div style="background-color:{bg_color}; padding:10px; border-radius:10px; text-align:center;">
                 <h2 style="color:black;">Prediction: {prediction_label}</h2>
-                <p style="font-size:20px; font-weight:bold;">Candidate Score: {candidate_score[0]:.2f}</p>
+                <p style="font-size:30px; font-weight:bold;">Candidate Score: {candidate_score[0]:.2f}</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -151,7 +151,6 @@ def run():
             recruitment_strategy,
             experience_years,
             education_level,
-            candidate_score[0]
         ]
-        fig = plot_candidate(stats, candidate_score[0])
+        fig = plot_candidate(stats)
         st.pyplot(fig)
