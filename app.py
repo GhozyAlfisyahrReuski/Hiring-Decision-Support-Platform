@@ -35,9 +35,3 @@ elif page == 'EDA':
     eda.run()
 else:
     predict.run()
-
-# === Home page title (default view) ===
-if page == 'Home':
-    st.title("Welcome to CitoConnect Hiring Decision Support Platform")
-    st.write("Empowering your hiring process with data-driven insights.")
-
