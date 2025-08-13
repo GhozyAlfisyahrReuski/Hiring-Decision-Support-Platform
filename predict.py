@@ -57,7 +57,7 @@ angles += angles[:1]
 def plot_candidate(stats):
     # Normalize scores for consistent plotting (0–100 scale)
     stats_norm = [s / m * 100 for s, m in zip(stats, max_values)]
-    stats_norm += stats_norm[:1]  # close the loop
+    stats_norm += stats_norm[:1]
 
     fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
     ax.plot(angles, stats_norm, color="blue", linewidth=2)
@@ -71,7 +71,7 @@ def plot_candidate(stats):
     ax.set_yticks([20, 40, 60, 80, 100])
     ax.set_yticklabels(["20", "40", "60", "80", "100"])
 
-    # Add custom category labels for specific axes
+    # Custom category labels
     category_labels = {
         "EducationLevel": ["Bachelor T1", "Bachelor T2", "Master's", "PhD"],
         "ExperienceYears": ["5 yrs", "10 yrs", "15 yrs"],
@@ -84,10 +84,16 @@ def plot_candidate(stats):
             max_val = max_values[i]
             step = max_val / len(vals)
             angle = angles[i]
+
             for j, txt in enumerate(vals, start=1):
                 r = (j * step) / max_val * 100  # convert to percentage scale
-                ax.text(angle, r, txt, ha='center', va='center', fontsize=8,
-                        rotation=angle * 180 / np.pi)
+                ax.text(
+                    angle, r + 5, txt,  # +5 offset for clarity
+                    ha='center', va='center',
+                    fontsize=8,
+                    rotation=0,  # keep horizontal
+                    rotation_mode='anchor'
+                )
 
     return fig
 
@@ -184,4 +190,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
