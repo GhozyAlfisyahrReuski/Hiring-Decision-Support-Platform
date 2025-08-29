@@ -1,148 +1,170 @@
+---
+
+# 💼 CitoConnect — Hiring Decision Support Platform
+
+![Python](https://img.shields.io/badge/Python-3.9%2B-brightgreen.svg)
+![Framework](https://img.shields.io/badge/Framework-Streamlit-orange.svg)
+![Model](https://img.shields.io/badge/Model-XGBoost-blue.svg)
+![Status](https://img.shields.io/badge/Status-Deployed-success.svg)
+
+🔗 [Live Dashboard](https://citoconnect.streamlit.app/)
 
 ---
 
-# Hiring Decision Support Platform
+## Overview
 
-## Repository Outline
+Hiring decisions are often made subjectively through interviews, test scores, and personal impressions.
+Without data-driven support, companies risk **bias, inefficiency, and missed talent opportunities**.
+
+**CitoConnect** is an **ML-powered hiring decision platform** that:
+
+* Predicts hiring outcomes with an **XGBoost classifier**
+* Provides **candidate scoring** that combines hard & soft skills
+* Offers **visual insights** into recruitment data
+* Ensures **fair and consistent decision-making**
+
+---
+
+## Repository Structure
 
 ```
 ModelDeploymentGhozy/
 │
-├── app.py                    - Main Streamlit application 
-├── home.py                   - Homepage layout and content
-├── eda.py                    - Exploratory Data Analysis 
-├── predict.py                - Prediction logic script
-├── best_xgb_model.pkl        - Trained XGBoost model
-├── best_xgb_params.json      - Optimal model parameters 
-├── recruitment_data.csv      - Training dataset
-├── requirements.txt          - Python dependencies  
-├── Training-the-HR-Team-1.20.20.jpg - Image used in homepage
+├── app.py                    # Main Streamlit application 
+├── home.py                   # Homepage layout and content
+├── eda.py                    # Exploratory Data Analysis module
+├── predict.py                # Prediction logic script
+├── best_xgb_model.pkl        # Trained XGBoost model
+├── best_xgb_params.json      # Optimal model parameters 
+├── recruitment_data.csv      # Training dataset
+├── requirements.txt          # Python dependencies  
+├── Training-the-HR-Team-1.20.20.jpg   # Image for homepage
 
 assets/
 │
-├── Eda.png     - Screenshot of dashboards' EDA page
-├── Home.png    - Screenshot of dashboards' Home page
-├── Predict.png - Screenshot of dashboards' Predict page
+├── Eda.png        # Screenshot of EDA page
+├── Home.png       # Screenshot of Home page
+├── Predict.png    # Screenshot of Prediction page
 
-1. README.md                  - Task overview 
-2. inference_candidates.csv   - Randomly generated inference dataset  
-3. P1M2_Ghozy_Reuski_inf.ipynb - Jupyter notebook for model inference  
-4. P1M2_Ghozy_Reuski.ipynb     - Jupyter notebook containing full project workflow  
-5. recruitment_data.csv       - Main recruitment dataset used for model training
-6. URL.txt                    - Text file containing links to dataset and dashboard
+notebooks/
+├── P1M2_Ghozy_Reuski.ipynb        # Full project workflow
+├── P1M2_Ghozy_Reuski_inf.ipynb    # Inference workflow
+├── inference_candidates.csv       # Sample inference dataset  
 ```
 
-## Problem Background
-
-Hiring decisions are often made subjectively through interviews, test scores, and personal impressions.
-However, without data-driven support, companies risk bias, inefficiency, and overlooking potential talent.
-CitoConnect aims to provide **an ML-powered platform** that predicts hiring outcomes and ranks candidates based on multiple performance metrics, helping companies make **fair, consistent, and informed** hiring decisions.
-
-## Project Output
-
-* **Deployed Streamlit dashboard** for candidate input and prediction.
-* **Predictive ML model** (XGBoost) for hiring classification.
-* **Candidate scoring system** combining technical and soft-skill metrics.
-* **Feature importance analysis** for explainability.
+---
 
 ## Data
 
-* **Source:** Synthetic dataset inspired by hiring decision research ([reference](https://arxiv.org/abs/2003.11591))
-* **Shape:** \~1,000+ rows, 11 features
-* **Features:** Age, Gender, EducationLevel, ExperienceYears, PreviousCompanies, DistanceFromCompany, InterviewScore, SkillScore, PersonalityScore, RecruitmentStrategy.
-* **Target:** Hiring decision 
+* **Source:** Synthetic dataset inspired by [Hiring Decision Support System research](https://arxiv.org/abs/2003.11591)
+* **Size:** \~1,000 rows × 11 features
+* **Features:**
+
+  * Age, Gender, EducationLevel, ExperienceYears, PreviousCompanies, DistanceFromCompany
+  * InterviewScore, SkillScore, PersonalityScore, RecruitmentStrategy
+* **Target:** Hiring Decision (Recommended / Not Recommended)
 * **Missing Values:** None
 
-## Method
+---
 
-* **Approach:** Supervised learning, classification task
-* **Model:** XGBoost Classifier
-* **Steps:**
+## Methodology
 
-  1. Data cleaning & preprocessing
-  2. Feature encoding & scaling
-  3. Model training & evaluation
-  4. SHAP analysis for feature importance
-  5. Candidate score calculation
-  6. Model inference
-  7. Deployment in Streamlit
+1. **Data Cleaning & Preprocessing**
+2. **Feature Encoding & Scaling**
+3. **Model Training (XGBoost)**
+4. **Evaluation & Metrics (F1, ROC-AUC, Classification Report)**
+5. **Explainability (SHAP Feature Importance)**
+6. **Candidate Score Calculation**
+7. **Deployment in Streamlit**
 
-## **Stacks**
+---
 
-* **Language:** Python 3.x
-* **Framework:** Streamlit
-* **Libraries:** pandas, numpy, scikit-learn, xgboost, shap, matplotlib, seaborn, scipy, joblib, json
-* **Deployment:** Local / Streamlit Cloud
+## Tech Stack
 
-| **Library / Package** | **Main Function**                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **pandas**            | Data manipulation and analysis for tabular datasets.                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| **numpy**             | Numerical computations and array manipulation.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| **matplotlib**        | Data visualization using charts and plots.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| **seaborn**           | Statistical data visualization with enhanced aesthetics.                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| **scipy.stats**       | Statistical tests (Chi-Square, Kendall’s Tau, T-Test).                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| **scikit-learn**      | Preprocessing (`SimpleImputer`, `StandardScaler`), column transformation (`ColumnTransformer`), pipelines (`Pipeline`), data splitting (`train_test_split`, `StratifiedKFold`), parameter tuning (`GridSearchCV`, `RandomizedSearchCV`), ML algorithms (`LogisticRegression`, `SVC`, `KNeighborsClassifier`, `DecisionTreeClassifier`, `RandomForestClassifier`), model evaluation (`f1_score`, `roc_auc_score`, `classification_report`, `confusion_matrix`, `RocCurveDisplay`). |
-| **xgboost**           | Gradient boosting algorithm for classification (`XGBClassifier`).                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| **shap**              | Model interpretation using SHAP values.                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| **joblib**            | Saving and loading Python models/objects.                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| **json**              | Reading and writing JSON files.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| **streamlit**         | Building interactive dashboards and web applications.                                                                                                                                                                                                         
-| **warnings**          | Managing warnings to keep outputs clean.       |                                                                  
+| **Library**      | **Purpose**                                             |
+| ---------------- | ------------------------------------------------------- |
+| **pandas**       | Data manipulation & analysis                            |
+| **numpy**        | Numerical computations                                  |
+| **matplotlib**   | Data visualization (plots, charts)                      |
+| **seaborn**      | Statistical data visualization                          |
+| **scipy.stats**  | Statistical tests (Chi-Square, Kendall’s Tau, T-Test)   |
+| **scikit-learn** | Preprocessing, pipelines, ML models, evaluation metrics |
+| **xgboost**      | Gradient boosting model (`XGBClassifier`)               |
+| **shap**         | Model interpretability (feature importance)             |
+| **joblib**       | Save/load models                                        |
+| **streamlit**    | Interactive dashboards                                  |
+| **json**         | Store optimal hyperparameters                           |
+
 ---
 
 ## Screenshots
 
-Below is the main dashboard of the **CitoConnect Hiring Decision Support Platform**:
+### Home Page
 
-![CitoConnect Dashboard](assets/Home.png)
-On this page, users can:
+![CitoConnect Home](assets/Home.png)
 
-- Read a brief introduction to the platform and its purpose.
+### EDA Page
 
-- Understand how the tool supports data-driven hiring decisions.
+![CitoConnect EDA](assets/Eda.png)
 
-- View the About section, which explains the platform’s goals and benefits.
+### Prediction Page
 
-- Navigate to other sections such as EDA and Prediction via the sidebar menu.
+![CitoConnect Prediction](assets/Predict.png)
 
 ---
 
-Below is the EDA page of the **CitoConnect Hiring Decision Support Platform**:
+## How to Run
 
-![CitoConnect Dashboard](assets/Eda.png)
-On this page, users can:
+Clone the repository:
 
-- Explore visual data analysis of the recruitment dataset.
+```bash
+git clone https://github.com/yourusername/ModelDeploymentGhozy.git
+cd ModelDeploymentGhozy
+```
 
-- See distributions of candidate attributes such as education level, experience, and interview scores.
+Install dependencies:
 
-- Identify patterns, correlations, and potential biases in the hiring dataset.
+```bash
+pip install -r requirements.txt
+```
 
-- Gain insights to support feature importance understanding before prediction.
+Run the app:
+
+```bash
+streamlit run app.py
+```
+
 ---
 
-Below is the Prediction page of the **CitoConnect Hiring Decision Support Platform**:
+## Results & Insights
 
-![CitoConnect Dashboard](assets/Predict.png)
-On this page, users can:
+* **XGBoost achieved strong classification performance** with optimized hyperparameters
+* **SHAP analysis** revealed that **InterviewScore, SkillScore, and PersonalityScore** were the most influential features in hiring decisions
+* **Candidate Scoring System** gives a holistic evaluation, balancing model probability with heuristic weightings
+* **Deployment** allows HR teams to interactively test candidates and make more **consistent, data-driven decisions**
 
-- Input candidate details (education, experience, skill scores, etc.).
+---
 
-- Get an instant prediction on whether the candidate is recommended for hiring.
+## Limitations
 
-- View the CandidateScore, which combines model probability and weighted heuristic scoring.
+* Based on synthetic data → may not fully generalize to real-world cases
+* Limited to structured attributes (no resumes, interviews, etc.)
+* Model designed for **support**, not as a final hiring authority
 
-- See a radar-chart visualization of CandidateScore.
-
-# URL
-
-The dashboard can be visited here:
-[CitoConnect Hiring Decision Support Platform](https://citoconnect.streamlit.app/)
+---
 
 ## References
 
-* Research paper: [Hiring Decision Support System](https://arxiv.org/abs/2003.11591), [Multi-Task Dynamic Weight Optimization](https://www.mdpi.com/2076-3417/15/5/2473), [Bias Monitoring](https://arxiv.org/abs/2309.13933), [Data-driven HR](https://arxiv.org/abs/1606.05611)
-* GitHub Markdown Guide: [Basic Writing and Formatting Syntax](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+* [Hiring Decision Support System (arXiv)](https://arxiv.org/abs/2003.11591)
+* [Bias Monitoring in Recruitment (arXiv)](https://arxiv.org/abs/2309.13933)
+* [Multi-Task Weight Optimization (MDPI)](https://www.mdpi.com/2076-3417/15/5/2473)
+* [Data-Driven HR (arXiv)](https://arxiv.org/abs/1606.05611)
 
 ---
 
+**Author**: Ghozy Reuski
+
+* GitHub: [@GhozyAlfisyahrReuski]([https://github.com/yourusername](https://github.com/GhozyAlfisyahrReuski))
+* LinkedIn: [Ghozy Alfisyahr Reuski]([https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/ghozy-alfisyahr-reuski-1133481ba/))
+
+---
